@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Save Days</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/jqui/jquery-ui.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jqui/jquery-ui.min.js"></script>
+    <style>
+        .container
+        {
+            line-height: 0;
+        }
+        h4 {
+            margin-top: 25px;
+        }
+        .row {
+            ;
+        }
+        .row .row {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+        [class*="col-"] {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            background-color: white;
+            border: 1px solid black;
+        }
+
+        hr {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .past
+        {
+            color:white;
+            border: 1px solid black;
+            background-color: black;
+        }
+        body, html
+        {
+            height: 100%;
+        }
+        textarea {
+            color: black;
+            font: inherit;
+            margin: 0;
+        }
+        .ui-widget-header
+        {
+            color:black;
+        }
+    </style>
+</head>
+<body>
+<h1 id="title">Check Your Life.</h1>
+<h2 id="subtitle">How Much Life Do You Have Left?</h2>
+<h5 id="70year">Assuming you have 70 years life.</h5>
+<h2></h2>
+<div class="container">
+    <div class="row">
+    </div>
+</div>
+<h1 style="display: none" id="end">Have a good time.</h1>
+<div id="picker" style="height: 100%;width: 100%;min-height: 100%;min-width: 100%">
+<div class="container-fluid" style="display:table;height: 100%;width: 100%">
+    <div class="row-fluid" style="height: 100%; display:table-cell; vertical-align: middle;">
+        <div class="centering text-center" style="color:black">
+            <label for="datepicker">Tell me your birthday:</label><input type="text" id="datepicker" readonly/>
+            <input type="button" value="Get disappointed in your life." onclick="go();" />
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script>
+    $("#title").hide();
+    $("#subtitle").hide();
+    $(".container").hide();
+    $("#70year").hide();
+    $(function() {
+        $( "#datepicker" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            minDate: "-70Y",
+            yearRange:"1940:2013"
+        });
+    });
+    function go() {
+        $("#picker").hide();
+        $("#title").fadeIn(1000, function () {
+            $("#subtitle").fadeIn(1000, function () {
+                $("#70year").fadeIn(1000);
+                var birthday = $("input#datepicker").datepicker("getDate");
+                var today = new Date();
+                var past;
+                past = (today.getFullYear() - birthday.getFullYear()) * 12;
+                past -= birthday.getMonth();
+                past += today.getMonth();
+                past = past <= 0 ? 0 : past;
+                //past +=1;
+                console.log(past);
+                var totalMonth = 900;
+                var rowMonth = 12;
+                var rows = Math.floor(totalMonth / rowMonth);
+                var thisMonth = 0;
+                var htmlStr;
+                for (var row = 0; row < rows; row++) {
+                    for (var grid = 0; grid < rowMonth; grid++) {
+                        thisMonth = row * rowMonth + grid + 1;
+                        if (thisMonth <= past) {
+                            htmlStr = "<div class=\"col-xs-1 past\">" + thisMonth + "</div>"
+                        } else {
+                            htmlStr = "<div class=\"col-xs-1\">" + thisMonth + "</div>"
+                        }
+                        $(".row").append(htmlStr);
+                    }
+                }
+                $(".container").fadeIn(1000);
+                $("#end").show();
+            });
+        });
+    }
+
+
+</script>
+</body>
+</html>
